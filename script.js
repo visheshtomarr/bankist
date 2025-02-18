@@ -58,10 +58,21 @@ btnLearnMore.addEventListener('click', (e) => {
 })
 
 // For smooth scrolling to a particular section
-document.querySelectorAll('.nav__link').forEach(element => {
-    element.addEventListener('click', (e) => {
-        e.preventDefault();
-        const id = element.getAttribute('href');
+// document.querySelectorAll('.nav__link').forEach(element => {
+//     element.addEventListener('click', (e) => {
+//         e.preventDefault();
+//         const id = element.getAttribute('href');
+//         document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+//     });
+// });
+// The above method is not efficient as it creates a new event listener for each element.
+// Instead, we will use event delegation.
+document.querySelector('.nav__links').addEventListener('click', (e) => {
+    e.preventDefault();
+
+    // Match the current target of event in its classlist.
+    if (e.target.classList.contains('nav__link')) {
+        const id = e.target.getAttribute('href');
         document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
-    });
+    }
 });
