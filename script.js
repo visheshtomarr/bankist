@@ -1,10 +1,16 @@
 'use strict';
 
-// Modal
+/////////////////////
+// Elements
+const btnLearnMore = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+
+/////////////////////
+// Functions
 
 const openModal = (e) => {
     e.preventDefault();
@@ -17,7 +23,10 @@ const closeModal = () => {
     overlay.classList.add('hidden');
 }
 
-// Eventlistener for opening modal window.
+/////////////////////
+// Event listeners
+
+// For opening modal window.
 btnsOpenModal.forEach(btn => {
     btn.addEventListener('click', openModal)
 })
@@ -32,11 +41,7 @@ document.addEventListener('keydown', (e) => {
         closeModal();
 });
 
-// Elements
-const btnLearnMore = document.querySelector('.btn--scroll-to');
-const section1 = document.querySelector('#section--1');
-
-// Event handler for smooth scrolling.
+// For smooth scrolling.
 btnLearnMore.addEventListener('click', (e) => {
     const section1Coords = section1.getBoundingClientRect();
 
@@ -51,3 +56,12 @@ btnLearnMore.addEventListener('click', (e) => {
     // Method doesn't require calculation of the current scroll position.
     section1.scrollIntoView({ behavior: 'smooth' });
 })
+
+// For smooth scrolling to a particular section
+document.querySelectorAll('.nav__link').forEach(element => {
+    element.addEventListener('click', (e) => {
+        e.preventDefault();
+        const id = element.getAttribute('href');
+        document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+    });
+});
