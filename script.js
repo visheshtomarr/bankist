@@ -53,14 +53,15 @@ const stickyNav = entries => {
 
 // To reveal sections on scroll.
 const revealSection = (entries, observer) => {
-    const entry = entries[0];
-
-    // Guard clause.
-    if (!entry.isIntersecting) return;
-
-    entry.target.classList.remove('section--hidden');
-    // After scrolling to the end of each section, we will unobserve it.
-    observer.unobserve(entry.target);
+    // console.log(entries);
+    entries.forEach(entry => {
+        // Guard clause.
+        if (!entry.isIntersecting) return;
+    
+        entry.target.classList.remove('section--hidden');
+        // After scrolling to the end of each section, we will unobserve it.
+        observer.unobserve(entry.target);
+    });
 }
 
 /////////////////////
