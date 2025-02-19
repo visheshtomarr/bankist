@@ -205,13 +205,7 @@ images.forEach(image => imageObserver.observe(image));
 let currentSlide = 0;
 const maxSlide = slides.length;
 
-// Positioning the slides.
-const positionSlides = (slides) => {
-    slides.forEach((slide, i) => {
-        slide.style.transform = `translateX(${100 * i}%)`;
-    });
-}
-positionSlides(slides);
+// Setting the initial styling for slides.
 slider.style.overflow = 'hidden';
 
 // Function for traversing slides.
@@ -220,6 +214,7 @@ const traverseSlides = curslide => {
         slide.style.transform = `translateX(${100 * (i - curslide)}%)`;
     })
 }
+traverseSlides(0);
 
 // Function for next slide.
 const nextSlide = () => {
@@ -239,3 +234,9 @@ const previousSlide = () => {
 
 btnSliderRight.addEventListener('click', nextSlide);
 btnSliderLeft.addEventListener('click', previousSlide);
+
+// For keyboard events.
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') nextSlide();
+    if (e.key === 'ArrowLeft') previousSlide();
+})
