@@ -222,6 +222,7 @@ const nextSlide = () => {
     if (currentSlide !== maxSlide - 1) currentSlide++;
     else currentSlide = 0;
     traverseSlides(currentSlide);
+    activateDot(currentSlide);
 }
 
 // Function for previous slide.
@@ -230,6 +231,7 @@ const previousSlide = () => {
     if (currentSlide !== 0) currentSlide--;
     else currentSlide = maxSlide - 1;
     traverseSlides(currentSlide);
+    activateDot(currentSlide);
 }
 
 btnSliderRight.addEventListener('click', nextSlide);
@@ -240,3 +242,38 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight') nextSlide();
     if (e.key === 'ArrowLeft') previousSlide();
 })
+
+
+// For using dots in slider.
+const dotsContainer = document.querySelector('.dots');
+
+// Function for creating dots.
+const createDots = () => {
+    slides.forEach((_, i) => {
+        dotsContainer.insertAdjacentHTML(
+            'beforeend',
+            `<button class="dots__dot" data-slide=${i}></button>`
+        );
+    });
+}
+createDots();
+
+// Function for activating dots.
+const activateDot = slide => {
+    // Removing active class from all dots.
+    document
+    .querySelectorAll('.dots__dot')
+    .forEach(dot => dot.classList.remove('dots__dot--active'));
+
+    // Adding active class to the current dot.
+    document.querySelector(`.dots__dot[data-slide="${slide}"]`).classList.add('dots__dot--active');
+}
+activateDot(0);
+
+dotsContainer.addEventListener('click', (e) => {
+    if (e.target.classList.contains('dots__dot')) {
+        currentSlide = Number(e.target.dataset.slide);
+        traverseSlides(currentSlide);
+        activateDot(currentSlide);
+    }
+});
