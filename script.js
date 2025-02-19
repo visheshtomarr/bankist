@@ -13,6 +13,7 @@ const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContent = document.querySelectorAll('.operations__content');
 const nav = document.querySelector('.nav');
 const header = document.querySelector('.header');
+const allSections = document.querySelectorAll('.section');
 
 /////////////////////
 // Functions
@@ -48,6 +49,18 @@ const stickyNav = entries => {
 
     if (!entry.isIntersecting) nav.classList.add('sticky');
     else nav.classList.remove('sticky');
+}
+
+// To reveal sections on scroll.
+const revealSection = (entries, observer) => {
+    const entry = entries[0];
+
+    // Guard clause.
+    if (!entry.isIntersecting) return;
+
+    entry.target.classList.remove('section--hidden');
+    // After scrolling to the end of each section, we will unobserve it.
+    observer.unobserve(entry.target);
 }
 
 /////////////////////
@@ -142,3 +155,15 @@ const navObserver = new IntersectionObserver(stickyNav, {
     rootMargin: `${navbarHeight}px`,
 });
 navObserver.observe(sentinel);
+
+// For revealing sections on scroll.
+const sectionObserver = new IntersectionObserver(revealSection, {
+    root: null,
+    // As soon as 10% of the section is visible,
+    // the callback function will be called.
+    threshold: 0.1,
+});
+allSections.forEach(section => {
+    sectionObserver.observe(section);
+    section.classList.add('section--hidden');
+});
