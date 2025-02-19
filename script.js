@@ -15,6 +15,10 @@ const nav = document.querySelector('.nav');
 const header = document.querySelector('.header');
 const allSections = document.querySelectorAll('.section');
 const images = document.querySelectorAll('img[data-src]');
+const slides = document.querySelectorAll('.slide');
+const slider = document.querySelector('.slider');
+const btnSliderLeft = document.querySelector('.slider__btn--left');
+const btnSliderRight = document.querySelector('.slider__btn--right');
 
 /////////////////////
 // Functions
@@ -67,7 +71,7 @@ const revealSection = (entries, observer) => {
 
 // To lazy load the images.
 const imageLoad = (entries, observer) => {
-    console.log(entries);
+    // console.log(entries);
     entries.forEach(entry => {
         if (!entry.isIntersecting) return;
     
@@ -196,3 +200,42 @@ const imageObserver = new IntersectionObserver(imageLoad, {
     threshold: 0,
 });
 images.forEach(image => imageObserver.observe(image));
+
+// For the slider component.
+let currentSlide = 0;
+const maxSlide = slides.length;
+
+// Positioning the slides.
+const positionSlides = (slides) => {
+    slides.forEach((slide, i) => {
+        slide.style.transform = `translateX(${100 * i}%)`;
+    });
+}
+positionSlides(slides);
+slider.style.overflow = 'hidden';
+
+// Function for traversing slides.
+const traverseSlides = curslide => {
+    slides.forEach((slide, i) => {
+        slide.style.transform = `translateX(${100 * (i - curslide)}%)`;
+    })
+}
+
+// Function for next slide.
+const nextSlide = () => {
+    // We will increase currentSlide counter until it reaches maxSlide.
+    if (currentSlide !== maxSlide - 1) currentSlide++;
+    else currentSlide = 0;
+    traverseSlides(currentSlide);
+}
+
+// Function for previous slide.
+const previousSlide = () => {
+    // We will decrease the currentSlide counter until it reaches 0.
+    if (currentSlide !== 0) currentSlide--;
+    else currentSlide = maxSlide - 1;
+    traverseSlides(currentSlide);
+}
+
+btnSliderRight.addEventListener('click', nextSlide);
+btnSliderLeft.addEventListener('click', previousSlide);
