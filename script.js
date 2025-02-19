@@ -12,6 +12,7 @@ const tabs = document.querySelectorAll('.operations__tab');
 const tabsContainer = document.querySelector('.operations__tab-container');
 const tabsContent = document.querySelectorAll('.operations__content');
 const nav = document.querySelector('.nav');
+const header = document.querySelector('.header');
 
 /////////////////////
 // Functions
@@ -39,6 +40,14 @@ const handleHover = function (e) {
         });
         logo.style.opacity = this;
     }
+}
+
+// To make the navigation bar sticky.
+const stickyNav = entries => {
+    const entry = entries[0];
+
+    if (!entry.isIntersecting) nav.classList.add('sticky');
+    else nav.classList.remove('sticky');
 }
 
 /////////////////////
@@ -119,3 +128,17 @@ tabsContainer.addEventListener('click', (e) => {
 // For menu fading animation.
 nav.addEventListener('mouseover', handleHover.bind(0.5));
 nav.addEventListener('mouseout', handleHover.bind(1));
+
+// For sticky navigation.
+header.insertAdjacentHTML('afterbegin', '<div class="nav-sentinel"></div>');
+const sentinel = document.querySelector('.nav-sentinel');
+const navbarHeight = nav.getBoundingClientRect().height;
+const navObserver = new IntersectionObserver(stickyNav, {
+    // The root is the viewport.
+    root: null,
+    // As soon as the header is 0% visible, the callback function
+    // will be called.
+    threshold: 0,
+    rootMargin: `${navbarHeight}px`,
+});
+navObserver.observe(sentinel);
