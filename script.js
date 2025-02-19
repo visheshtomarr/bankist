@@ -14,6 +14,7 @@ const tabsContent = document.querySelectorAll('.operations__content');
 const nav = document.querySelector('.nav');
 const header = document.querySelector('.header');
 const allSections = document.querySelectorAll('.section');
+const images = document.querySelectorAll('img[data-src]');
 
 /////////////////////
 // Functions
@@ -60,6 +61,26 @@ const revealSection = (entries, observer) => {
     
         entry.target.classList.remove('section--hidden');
         // After scrolling to the end of each section, we will unobserve it.
+        observer.unobserve(entry.target);
+    });
+}
+
+// To lazy load the images.
+const imageLoad = (entries, observer) => {
+    console.log(entries);
+    entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+    
+        // Replace the src attribute with data-src.
+        // This will emit a load event and we will then
+        // remove the lazy-image class from the 'entry.target'.
+        entry.target.src = entry.target.dataset.src;
+    
+        // Remove 'lazy-image' class from entry.target.
+        entry.target.addEventListener('load', () => {
+            entry.target.classList.remove('lazy-img');
+        });
+    
         observer.unobserve(entry.target);
     });
 }
@@ -150,7 +171,7 @@ const navbarHeight = nav.getBoundingClientRect().height;
 const navObserver = new IntersectionObserver(stickyNav, {
     // The root is the viewport.
     root: null,
-    // As soon as the header is 0% visible, the callback function
+    // As soon as the navbar is 0% visible, the callback function
     // will be called.
     threshold: 0,
     rootMargin: `${navbarHeight}px`,
@@ -168,3 +189,10 @@ allSections.forEach(section => {
     sectionObserver.observe(section);
     section.classList.add('section--hidden');
 });
+
+// For lazy loading the images.
+const imageObserver = new IntersectionObserver(imageLoad, {
+    root:null,
+    threshold: 0,
+});
+images.forEach(image => imageObserver.observe(image));
