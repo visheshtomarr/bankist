@@ -34,7 +34,7 @@ To view or modify the project locally:
 
 1.  **Clone the Repository:**
     
-        git clone https://your-repo-url.git
+        git clone https://github.com/visheshtomarr/bankist.git
         cd bankist
         
     
